@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2人対戦コマゲーム（ボム追加版）</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>2人対戦コマゲーム（ボム追加版）</h1>
+
+  <!-- 設定フォーム：2プレイヤー分 -->
+  <form id="settingsForm">
+    <fieldset>
+      <legend>プレイヤー1（青）タイプ選択</legend>
+      <select id="p1Upgrade">
+        <option value="normal">ノーマルタイプ（攻撃3・HP24・速度700ms）</option>
+        <option value="attacker">アタッカータイプ（攻撃4・HP24・速度1100ms）</option>
+        <option value="tank">体力タイプ（攻撃3・HP48・速度700ms）</option>
+        <option value="speed">スピードタイプ（攻撃2・HP16・速度300ms）</option>
+        <option value="super">スーパータイプ (攻撃2・HP12・速度40ms)</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>プレイヤー2（赤）タイプ選択</legend>
+      <select id="p2Upgrade">
+        <option value="normal">ノーマルタイプ（攻撃3・HP24・速度700ms）</option>
+        <option value="attacker">アタッカータイプ（攻撃4・HP24・速度1100ms）</option>
+        <option value="tank">体力タイプ（攻撃3・HP48・速度700ms）</option>
+        <option value="speed">スピードタイプ（攻撃2・HP16・速度300ms）</option>
+        <option value="super">スーパータイプ (攻撃2・HP12・速度40ms)</option>
+      </select>
+    </fieldset>
+    <button type="button" id="startButton">ゲームスタート</button>
+  </form>
+
+  <!-- ステータス表示（2人分） -->
+  <div id="stats">
+    <div class="player-stats">
+      <div class="label">プレイヤー1（青）</div>
+      <div>HP: <span id="p1-hp-text">--</span></div>
+      <div>攻撃力: <span id="p1-attack-text">--</span></div>
+      <div class="hp-bar">
+        <div class="hp-bar-inner" id="p1-hp-bar"></div>
+      </div>
+    </div>
+    <div class="player-stats">
+      <div class="label">プレイヤー2（赤）</div>
+      <div>HP: <span id="p2-hp-text">--</span></div>
+      <div>攻撃力: <span id="p2-attack-text">--</span></div>
+      <div class="hp-bar">
+        <div class="hp-bar-inner" id="p2-hp-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ボード表示 -->
+  <div id="board"></div>
+  <p id="message"></p>
+
+  <!-- 操作パネル：プレイヤー1 -->
+  <h2>プレイヤー1（青）操作</h2>
+  <div class="buttons blue-buttons">
+    <button onclick="turnLeft(players[0])">← 左回転</button>
+    <button onclick="moveForward(players[0])">↑ 進む</button>
+    <button onclick="turnRight(players[0])">→ 右回転</button>
+    <button onclick="attack(players[0])">💥 攻撃</button>
+    <button onclick="placeBomb(players[0])">💣 ボム設置</button>
+  </div>
+  <input type="text" id="player1Command" placeholder="例: framx...">
+  <button onclick="runCommands(players[0], 'player1Command')">プレイヤー1実行</button>
+  <button onclick="tryAttackDecision(players[0])">攻撃予測（P1）</button>
+  <!-- ↓ ここからステータス表示を追加 -->
+  <div class="status-line">
+    <span>ステータス（P1）：</span>
+    <span id="player1Status">待機中</span>
+  </div>
+  <!-- ↑ ここまで追加 -->
+
+  <!-- 操作パネル：プレイヤー2 -->
+  <h2>プレイヤー2（赤）操作</h2>
+  <div class="buttons red-buttons">
+    <button onclick="turnLeft(players[1])">← 左回転</button>
+    <button onclick="moveForward(players[1])">↑ 進む</button>
+    <button onclick="turnRight(players[1])">→ 右回転</button>
+    <button onclick="attack(players[1])">💥 攻撃</button>
+    <button onclick="placeBomb(players[1])">💣 ボム設置</button>
+  </div>
+  <input type="text" id="player2Command" placeholder="例: arlmy...">
+  <button onclick="runCommands(players[1], 'player2Command')">プレイヤー2実行</button>
+  <button onclick="tryAttackDecision(players[1])">攻撃予測（P2）</button>
+  <!-- ↓ ここからステータス表示を追加 -->
+  <div class="status-line">
+    <span>ステータス（P2）：</span>
+    <span id="player2Status">待機中</span>
+  </div>
+  <!-- ↑ ここまで追加 -->
+
+  <!-- 全コマンド停止ボタン -->
+  <button id="stopAll" onclick="resetCommands()">すべて停止</button>
+  <!-- ゲーム説明ページへのリンク -->
+  <div class="explanation-link">
+  <a href="https://winder101010.github.io/tank.game.information/" target="_blank" rel="noopener">
+    ▶︎ ゲームの遊び方・説明を見る
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
